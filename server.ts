@@ -2,10 +2,12 @@ import express, { Request, Response, RequestHandler } from "express";
 import cors from "cors";
 import { UserController } from "./controllers/UserControllers";
 import { PrismaClient } from "@prisma/client";
+import os from "os";
 
 const app = express();
 const port: number = 3001;
 const prisma = new PrismaClient();
+const apiVersion = "1.0.0"; // ✅ Define API version
 
 // ✅ Middleware
 app.use(cors());
@@ -21,6 +23,29 @@ app.get("/api/check-db-connection", async (req: Request, res: Response) => {
     } catch (error: any) {
         console.error("❌ Database Connection Failed:", error);
         res.status(500).json({ error: "Cannot connect to database", details: error.message });
+    }
+});
+
+// ✅ New System Status Route
+app.get("/api/system-status", async (req: Request, res: Response) => {
+    try {
+        const startTime = Date.now();
+        await prisma.$connect();
+        const dbLatency = Date.now() - startTime; // ✅ Measure DB response time
+
+        res.json({
+            server: "Connected",
+            database: "Connected",
+            apiVersion,
+            environment: process.env.NODE_ENV || "Development",
+        });
+    } catch (error) {
+        res.status(500).json({
+            server: "Disconnected",
+            database: "Disconnected",
+            apiVersion,
+            environment: process.env.NODE_ENV || "Development",
+        });
     }
 });
 
@@ -44,7 +69,7 @@ process.on("SIGINT", async () => {
 
 app.listen(port, () => {
     console.log(`🚀 Server is running on http://localhost:${port}`);
-    console.log(`🔧 Running in development mode`);
+    console.log(`🔧 Running in ${process.env.NODE_ENV || "development"} mode`);
 });
 
 /**

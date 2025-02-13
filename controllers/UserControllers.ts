@@ -24,13 +24,23 @@ export const UserController = {
                 return res.status(401).json({ message: "Invalid username or password" });
             }
 
+            // ✅ Fix: Include `user` object inside JWT payload
             const token = jwt.sign(
-                { id: user.id },
+                {
+                    user: {
+                        id: user.id,
+                        username: user.username,  // Include username
+                        name: user.name           // Include name
+                    }
+                },
                 process.env.SECRET_KEY as string,
                 { expiresIn: "30d" }
             );
 
-            return res.json({ token });
+            return res.json({
+                token,
+                user: { id: user.id, username: user.username, name: user.name }
+            });
 
         } catch (error: any) {
             console.error("❌ SignIn Error:", error);
