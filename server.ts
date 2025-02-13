@@ -1,8 +1,8 @@
 import express, { Request, Response, RequestHandler } from "express";
 import cors from "cors";
 import { UserController } from "./controllers/UserControllers";
+import { CompanyController } from "./controllers/CompanyController";
 import { PrismaClient } from "@prisma/client";
-import os from "os";
 
 const app = express();
 const port: number = 3001;
@@ -57,9 +57,18 @@ app.get("/", (req: Request, res: Response) => {
 // ✅ User Authentication Routes
 app.post("/api/user/signIn", UserController.signIn as RequestHandler);
 
+
 // ✅ Alias for `/api/user/signIn` → `/api/signin`
 app.post("/api/signin", UserController.signIn as RequestHandler);
 
+
+
+//Company
+app.post("/company", CompanyController.create as RequestHandler);
+
+
+
+//*--------------------------------------------------------------------------------------------------
 // ✅ Graceful Shutdown - Close Prisma on Exit
 process.on("SIGINT", async () => {
     console.log("🛑 Shutting down server...");

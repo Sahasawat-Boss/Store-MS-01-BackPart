@@ -16,10 +16,20 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  id       String @id @default(auto()) @map("_id") @db.ObjectId //Auto for mongoDB
   username String @unique
   password String
   name     String
   level    String @default("user")
   status   String @default("active")
 }
+
+model Company {
+    id       String  @id @default(auto()) @map("_id") @db.ObjectId //Auto for mongoDB
+    name     String
+    address  String
+    phone    String
+    email    String?
+    taxCode  String
+}
+
