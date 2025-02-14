@@ -8,7 +8,7 @@ export const CompanyController = {
         try {
             await prisma.company.create({
                 data: {
-                    name: req.body.name,
+                    storeName: req.body.storeName,
                     address: req.body.address,
                     phone: req.body.phone,
                     email: req.body.email ?? "",
@@ -16,7 +16,7 @@ export const CompanyController = {
                 },
             });
 
-            return res.json({ message: "success" });
+            return res.json({ message: "Updated Successfully" });
         } catch (err: unknown) {
             if (err instanceof Error) {
                 return res.status(500).json({ error: err.message });

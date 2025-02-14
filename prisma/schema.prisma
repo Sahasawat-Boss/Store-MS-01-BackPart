@@ -25,11 +25,10 @@ model User {
 }
 
 model Company {
-    id       String  @id @default(auto()) @map("_id") @db.ObjectId //Auto for mongoDB
-    name     String
-    address  String
-    phone    String
-    email    String?
-    taxCode  String
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId //Auto for mongoDB
+  storeName String
+  address   String
+  phone     String
+  email     String?
+  taxCode   String
 }
-
