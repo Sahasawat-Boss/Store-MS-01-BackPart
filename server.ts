@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import userRoutes from "./routes/userRoutes";
 import companyRoutes from "./routes/companyRoutes";
 import systemRoutes from "./routes/systemRoutes";
+import productRoute from "./routes/productRoutes";
 
 const app = express();
 const port: number = 3001;
@@ -23,6 +24,9 @@ app.use("/api/company", companyRoutes);
 
 // ✅ System Route Mapping
 app.use("/api/system", systemRoutes);
+
+// ✅ Use Product Routes
+app.use("/api/product", productRoute);
 
 
 

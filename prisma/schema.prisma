@@ -32,3 +32,14 @@ model Company {
   email     String?
   taxCode   String
 }
+
+model Product {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  serialNo       String  @unique
+  productName    String
+  productDetails String?
+  productPrice   Float
+  remark         String?
+  status         String  @default("available")
+}
+

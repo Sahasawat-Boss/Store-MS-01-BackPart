@@ -4,33 +4,29 @@ import { Request, Response } from "express";
 const prisma = new PrismaClient();
 
 export const CompanyController = {
-    createOrUpdate: async (req: Request, res: Response): Promise<Response | void> => {
+    updateCompany: async (req: Request, res: Response): Promise<Response | void> => {
         try {
             const { storeName, address, phone, email, taxCode } = req.body;
 
-            // ✅ Check if a company already exists (based on `storeName`)
+            // ✅ Check if the company exists
             const existingCompany = await prisma.company.findFirst({
                 where: { storeName },
             });
 
-            if (existingCompany) {
-                // ✅ If company exists, update the existing record
-                await prisma.company.update({
-                    where: { id: existingCompany.id }, // Update by ID
-                    data: { address, phone, email: email ?? "", taxCode },
-                });
-
-                return res.json({ message: "Company updated successfully", updated: true });
-            } else {
-                // ✅ If company does not exist, create a new one
-                await prisma.company.create({
-                    data: { storeName, address, phone, email: email ?? "", taxCode },
-                });
-
-                return res.json({ message: "Company created successfully", created: true });
+            if (!existingCompany) {
+                return res.status(404).json({ message: "Company not found" });
             }
+
+            // ✅ Update the existing company
+            await prisma.company.update({
+                where: { id: existingCompany.id },
+                data: { address, phone, email: email ?? "", taxCode },
+            });
+
+            return res.json({ message: "Company updated successfully", updated: true });
+
         } catch (err: unknown) {
-            console.error("❌ Error in createOrUpdate:", err);
+            console.error("❌ Error in updateCompany:", err);
             if (err instanceof Error) {
                 return res.status(500).json({ error: err.message });
             }
@@ -38,7 +34,7 @@ export const CompanyController = {
         }
     },
 
-    // ✅ New function to get company details
+    // ✅ Function to get company details
     getCompanyData: async (req: Request, res: Response): Promise<Response | void> => {
         try {
             const company = await prisma.company.findFirst(); // ✅ Fetch first company record
