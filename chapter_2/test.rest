@@ -1,0 +1,21 @@
+//  cltrl +alt+ r (to run)
+
+### Test GET /WEB
+GET http://localhost:3001/web
+
+### Test GET /api/data
+GET http://localhost:3001/api/data
+
+### Adding User
+POST http://localhost:3001/api/data
+Content-Type: application/json
+
+//JSON object
+{
+    "name": "Sahasawat, User2"
+}
+
+### Delete User
+DELETE http://localhost:3001/api/endpoint
+
+//Dont have to contain data (not specific)
